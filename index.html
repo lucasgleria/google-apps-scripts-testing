@@ -1,45 +1,79 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <base target="_top">
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 40px;
-      }
-      input, button {
-        margin: 8px 0;
-        padding: 8px;
-      }
-      #resultado {
-        margin-top: 15px;
-        font-weight: bold;
-        color: green;
-      }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        input, button { margin: 5px 0 15px 0; padding: 8px; }
+        button { cursor: pointer; }
+        .result { margin-top: 10px; font-weight: bold; color: green; }
     </style>
-  </head>
-  <body>
-    <h2>🎨 Teste de Coloração no Google Sheets</h2>
+</head>
+<body>
+    <h1>🎨 Ferramenta de Coloração - Google Sheets</h1>
 
-    <label>Célula:</label>
-    <input type="text" id="celula" placeholder="Ex: A1" value="A1"><br>
+    <!-- Seção para Colorir Célula Única -->
+    <div class="container">
+        <h2>Colorir Célula Única</h2>
+        <label>Célula (ex: A1):</label><br>
+        <input type="text" id="celula" value="A1"><br>
+        <label>Cor (ex: #ff0000 ou red):</label><br>
+        <input type="text" id="corCelula" value="#ffff00"><br>
+        <button onclick="aplicarCorCelula()">Aplicar Cor na Célula</button>
+        <div id="resultadoCelula" class="result"></div>
+    </div>
 
-    <label>Cor (hex ou nome):</label>
-    <input type="text" id="cor" placeholder="Ex: #ff0000 ou red" value="#00ff00"><br>
+    <!-- Seção para Colorir Linha Inteira -->
+    <div class="container">
+        <h2>Colorir Linha Inteira</h2>
+        <label>Linha (ex: 5):</label><br>
+        <input type="number" id="linha" value="5"><br>
+        <label>Cor (ex: #00ff00 ou green):</label><br>
+        <input type="text" id="corLinha" value="#00ff00"><br>
+        <button onclick="aplicarCorLinha()">Aplicar Cor na Linha</button>
+        <div id="resultadoLinha" class="result"></div>
+    </div>
 
-    <button onclick="aplicarCor()">Aplicar Cor</button>
-
-    <div id="resultado"></div>
+    <!-- Seção para Colorir Intervalo de Células -->
+    <div class="container">
+        <h2>Colorir Intervalo de Células</h2>
+        <label>Célula Inicial (ex: A2):</label><br>
+        <input type="text" id="inicioIntervalo" value="A2"><br>
+        <label>Célula Final (ex: E2):</label><br>
+        <input type="text" id="fimIntervalo" value="E2"><br>
+        <label>Cor (ex: #0000ff ou blue):</label><br>
+        <input type="text" id="corIntervalo" value="#0000ff"><br>
+        <button onclick="aplicarCorIntervalo()">Aplicar Cor no Intervalo</button>
+        <div id="resultadoIntervalo" class="result"></div>
+    </div>
 
     <script>
-      function aplicarCor() {
-        const celula = document.getElementById('celula').value;
-        const cor = document.getElementById('cor').value;
+        function aplicarCorCelula() {
+            const celula = document.getElementById('celula').value;
+            const cor = document.getElementById('corCelula').value;
+            google.script.run
+                .withSuccessHandler(msg => document.getElementById('resultadoCelula').innerText = msg)
+                .colorirCelula(celula, cor);
+        }
 
-        google.script.run
-          .withSuccessHandler(msg => document.getElementById('resultado').innerText = msg)
-          .colorirCelula(celula, cor);
-      }
+        function aplicarCorLinha() {
+            const linha = document.getElementById('linha').value;
+            const cor = document.getElementById('corLinha').value;
+            google.script.run
+                .withSuccessHandler(msg => document.getElementById('resultadoLinha').innerText = msg)
+                .colorirLinha(linha, cor);
+        }
+
+        function aplicarCorIntervalo() {
+            const inicio = document.getElementById('inicioIntervalo').value;
+            const fim = document.getElementById('fimIntervalo').value;
+            const cor = document.getElementById('corIntervalo').value;
+            google.script.run
+                .withSuccessHandler(msg => document.getElementById('resultadoIntervalo').innerText = msg)
+                .colorirIntervalo(inicio, fim, cor);
+        }
     </script>
-  </body>
+</body>
 </html>
